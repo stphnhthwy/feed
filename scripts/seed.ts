@@ -13,7 +13,7 @@ async function main() {
       },
       {
         content: "This is a seeded image post 📷",
-        mediaUrl: "/uploads/sample-photo.jpg"
+        mediaUrl: "/uploads/sample-photo.png"
       },
       {
         content: "Testing video rendering 🎥",
