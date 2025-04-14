@@ -16,19 +16,25 @@ export default function FeedPageContent({ posts, editable }: { posts: any[], edi
   }
 
   return (
+
     <div style={{ padding: "2rem", maxWidth: "600px", margin: "0 auto" }}>
-{posts.map((post) => (
-  <PostBlock
-    key={post.id}
-    post={post}
-    editable={editable}
-    onEdit={() => {
-      setSelectedPost(post)
-      setShowModal(true)
-    }}
-    onDelete={() => handleDelete(post.id)}
-  />
-))}
+
+      <div className="bg-brand-primary text-white p-section rounded-xl">
+        Custom Tailwind config is working ✅
+      </div>
+
+      {posts.map((post) => (
+        <PostBlock
+          key={post.id}
+          post={post}
+          editable={editable}
+          onEdit={() => {
+            setSelectedPost(post)
+            setShowModal(true)
+          }}
+          onDelete={() => handleDelete(post.id)}
+        />
+      ))}
 
       {showModal && selectedPost && (
         <PostFormModal post={selectedPost} onClose={() => {

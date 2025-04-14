@@ -12,7 +12,9 @@ export default function PostBlock({
   onDelete: () => void,
 }) {
   return (
-    <div style={{ marginBottom: "2rem", borderBottom: "1px solid #ddd", paddingBottom: "1rem" }}>
+    <div
+      className="bg-red-500" 
+      style={{ marginBottom: "2rem", borderBottom: "1px solid #ddd", paddingBottom: "1rem" }}>
       <p>{post.content}</p>
 
       {post.mediaUrl && (
