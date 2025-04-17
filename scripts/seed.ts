@@ -2,31 +2,50 @@ import { prisma } from "../src/lib/db"
 
 async function main() {
   console.log("🔄 Clearing existing posts...")
+  await prisma.media.deleteMany()
   await prisma.post.deleteMany()
 
   console.log("🌱 Seeding new posts...")
-  const result = await prisma.post.createMany({
-    data: [
-      {
-        content: "Hello world from seed script 🎉",
-        mediaUrl: null
-      },
-      {
-        content: "This is a seeded image post 📷",
-        mediaUrl: "/uploads/sample-photo.jpg"
-      },
-      {
-        content: "Testing video rendering 🎥",
-        mediaUrl: "/uploads/sample-video.mp4"
-      },
-      {
-        content: "This is an update!!",
-        mediaUrl: null
-      },
-    ]
-  })
 
-  console.log(`✅ Seeded ${result.count} posts.`)
+  const posts = [
+    {
+      content: "Testing video rendering 🎥",
+      media: [
+        { url: "/uploads/sample-video.mp4", type: "video" },
+      ],
+    },
+    {
+      content: "This is a three images post 📷",
+      media: [
+        { url: "/uploads/sample-photo.jpg", type: "image" },
+        { url: "/uploads/sample-photo.jpg", type: "image" },
+        { url: "/uploads/sample-photo.jpg", type: "image" },
+      ],
+    },
+    {
+      content: "This is a single image post 📷",
+      media: [
+        { url: "/uploads/sample-photo.jpg", type: "image" },
+      ],
+    },
+    {
+      content: "Testing an item without any video or image attached!",
+      media: [],
+    },
+  ]
+
+  for (const post of posts) {
+    await prisma.post.create({
+      data: {
+        content: post.content,
+        media: {
+          create: post.media,
+        },
+      },
+    })
+  }
+
+  console.log(`✅ Seeded ${posts.length} posts.`)
 }
 
 main()
