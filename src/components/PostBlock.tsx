@@ -1,5 +1,7 @@
 'use client'
 
+import PostMediaCarousel from "@/components/shared/PostMediaCarousel";
+
 export default function PostBlock({
   post,
   editable,
@@ -12,19 +14,13 @@ export default function PostBlock({
   onDelete: () => void,
 }) {
   return (
-    <div
-      className="bg-red-500" 
-      style={{ marginBottom: "2rem", borderBottom: "1px solid #ddd", paddingBottom: "1rem" }}>
+    <div className="mb-8">
       <p>{post.content}</p>
 
-      {post.mediaUrl && (
-        post.mediaUrl.endsWith(".mp4") ? (
-          <video controls style={{ width: "100%", marginTop: "1rem" }}>
-            <source src={post.mediaUrl} type="video/mp4" />
-          </video>
-        ) : (
-          <img src={post.mediaUrl} alt="Post media" style={{ width: "100%", marginTop: "1rem" }} />
-        )
+      {post.media?.length > 0 && (
+        <PostMediaCarousel
+          media={post.media}
+        />
       )}
 
       {editable && (

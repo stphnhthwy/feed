@@ -2,6 +2,8 @@
 
 import { useEditMode } from "@/lib/editMode"
 import { useState } from "react"
+import { Button } from "@/ui/components/Button"
+import { DialogLayout } from "./subframe/ui"
 import PostFormModal from "@/components/PostFormModal"
 import FeedPageContent from "@/components/FeedPageContent"
 
@@ -11,16 +13,21 @@ export default function FeedWrapper({ posts }: { posts: any[] }) {
 
   return (
     <div>
-      <button onClick={() => setEditMode(!editMode)} style={{ margin: "1rem" }}>
-        {editMode ? "Switch to Public View" : "Switch to Edit Mode"}
-      </button>
+      <Button
+        variant="neutral-secondary"
+        onClick={() => setEditMode(!editMode)} style={{ margin: "1rem" }}>
+        {editMode ? "Public View" : "Edit Mode"}
+      </Button>
 
       {editMode && (
         <>
-          <button onClick={() => setShowModal(true)} style={{ margin: "1rem" }}>
-            New Post
-          </button>
-          {showModal && <PostFormModal onClose={() => setShowModal(false)} />}
+          <Button
+            onClick={() => setShowModal(true)} style={{ margin: "1rem" }}>
+            Post
+          </Button>
+          <DialogLayout open={showModal} onOpenChange={setShowModal}>
+            <PostFormModal onClose={() => setShowModal(false)} />
+          </DialogLayout>
         </>
       )}
 

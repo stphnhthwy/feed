@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from "react"
+import { Button, TextArea, DialogLayout } from "./subframe/ui"
+import { getMediaOrientation } from "@/lib/orientation"
 
 type Post = {
   id: string
@@ -17,6 +19,7 @@ export default function PostFormModal({
 }) {
   const [content, setContent] = useState(post?.content || "")
   const [file, setFile] = useState<File | null>(null)
+  const [orientation, setOrientation] = useState<"portrait" | "landscape" | null>(null)
 
   const isDisabled = content.trim() === "" && !file && !post?.mediaUrl
 
@@ -32,7 +35,7 @@ export default function PostFormModal({
 
     const res = await fetch(endpoint, {
       method,
-      body: JSON.stringify({ content, mediaUrl }),
+      body: JSON.stringify({ content, mediaUrl, orientation }),
       headers: { "Content-Type": "application/json" }
     })
 
@@ -44,37 +47,51 @@ export default function PostFormModal({
   }
 
   return (
-    <div style={{
-      position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)",
-      display: "flex", justifyContent: "center", alignItems: "center"
-    }}>
-      <form onSubmit={handleSubmit} style={{
-        background: "#fff", padding: "2rem", borderRadius: "8px", width: "100%", maxWidth: "500px"
-      }}>
-        <h2>{post ? "Edit Post" : "Create a Post"}</h2>
-        <textarea
-          placeholder="What's on your mind?"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          rows={4}
-          style={{ width: "100%", marginBottom: "1rem" }}
-        />
+    <div className="w-full max-w-3xl">
+      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg w-full max-w-md space-y-4">
+        <h2 className="text-lg font-regular">{post ? "Edit Post" : "Create a Post"}</h2>
+
+        <TextArea error={false} variant="outline" label="" helpText="">
+          <TextArea.Input
+            className="h-auto min-h-[96px] w-full flex-none"
+            placeholder="What's on your mind?"
+            value={content}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value)}
+          />
+        </TextArea>
+
         <input
           type="file"
           accept="image/*,video/*"
-          onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-          style={{ marginBottom: "1rem" }}
+          onChange={async (e) => {
+            const selectedFile = e.target.files?.[0] ?? null
+            setFile(selectedFile)
+
+            if (selectedFile) {
+              const inferred = await getMediaOrientation(selectedFile)
+              setOrientation(inferred)
+            } else {
+              setOrientation(null)
+            }
+          }}
+          className="w-full text-sm text-gray-500"
         />
+
         {post?.mediaUrl && !file && (
-          <div style={{ marginBottom: "1rem", fontSize: "0.875rem", color: "#666" }}>
+          <div className="text-sm text-gray-500">
             Current file: {post.mediaUrl}
           </div>
         )}
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem" }}>
-          <button type="button" onClick={onClose}>Cancel</button>
-          <button type="submit" disabled={isDisabled}>
+
+        <div className="flex justify-end gap-2">
+          <Button
+            variant="neutral-secondary"
+            onClick={onClose}>
+            Cancel
+          </Button>
+          <Button type="submit" disabled={isDisabled}>
             {post ? "Update" : "Post"}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

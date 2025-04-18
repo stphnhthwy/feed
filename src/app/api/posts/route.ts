@@ -8,11 +8,22 @@ export async function GET() {
 
 export async function POST(req: Request) {
   const body = await req.json()
+  const { content, mediaUrl, orientation } = body
+
   const post = await prisma.post.create({
     data: {
-      content: body.content,
-      mediaUrl: body.mediaUrl ?? null
-    }
+      content,
+      media: mediaUrl
+        ? {
+          create: {
+            url: mediaUrl,
+            type: mediaUrl.endsWith(".mp4") ? "video" : "image",
+            orientation,
+          },
+        }
+        : undefined,
+    },
   })
+
   return Response.json(post)
 }

@@ -19,9 +19,7 @@ export default function FeedPageContent({ posts, editable }: { posts: any[], edi
 
     <div style={{ padding: "2rem", maxWidth: "600px", margin: "0 auto" }}>
 
-      <div className="bg-brand-primary text-white p-section rounded-xl">
-        Custom Tailwind config is working ✅
-      </div>
+      <p className="text-heading-1 text-blue-500 bg-success-500">Testing baseline Tailwind styles!</p>
 
       {posts.map((post) => (
         <PostBlock
