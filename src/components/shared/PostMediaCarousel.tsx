@@ -1,37 +1,41 @@
-type MediaCarouselProps = {
-    mediaUrls: string[];
+type Media = {
+    url: string;
+    type: "image" | "video";
+    orientation: "portrait" | "landscape" | null;
 };
 
-export default function MediaCarousel({ mediaUrls }: MediaCarouselProps) {
-    if (!mediaUrls || mediaUrls.length === 0) return null;
+type MediaCarouselProps = {
+    media: Media[];
+};
+
+export default function MediaCarousel({ media }: MediaCarouselProps) {
+    if (!media || media.length === 0) return null;
 
     return (
-        <div className="flex whitespace-nowrap gap-4">
-            {mediaUrls.map((url, i) => {
-                const isVideo = url.endsWith(".mp4") || url.endsWith(".webm");
-
-                return (
+        <div className="w-full overflow-x-auto">
+            <div className="flex whitespace-nowrap gap-2 scroll-smooth snap-x snap-mandatory">
+                {media.map((item, i) => (
                     <div
-                        key={i}
-                        className="flex-none w-full max-w-full"
+                        key={`${item.url}-${i}`}
+                        className={`flex-none snap-center rounded-8 ${item.orientation === "portrait"
+                            ? "w-[256px] aspect-auto"
+                            : "w-[512px] aspect-auto"
+                            }`}
                     >
-                        {isVideo ? (
-                            <video
-                                controls
-                            // className="w-full h-full object-cover rounded-md aspect-video"
-                            >
-                                <source src={url} type="video/mp4" />
+                        {item.type === "video" ? (
+                            <video controls className="w-full h-full object-contain rounded-md">
+                                <source src={item.url} type="video/mp4" />
                             </video>
                         ) : (
                             <img
-                                src={url}
+                                src={item.url}
                                 alt={`media-${i}`}
-                            // className="w-full h-full object-cover rounded-md aspect-video"
+                                className="w-full h-full object-cover rounded-md"
                             />
                         )}
                     </div>
-                );
-            })}
+                ))}
+            </div>
         </div>
     );
 }

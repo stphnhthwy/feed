@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Button, TextArea, DialogLayout } from "./subframe/ui"
+import { getMediaOrientation } from "@/lib/orientation"
 
 type Post = {
   id: string
@@ -18,6 +19,7 @@ export default function PostFormModal({
 }) {
   const [content, setContent] = useState(post?.content || "")
   const [file, setFile] = useState<File | null>(null)
+  const [orientation, setOrientation] = useState<"portrait" | "landscape" | null>(null)
 
   const isDisabled = content.trim() === "" && !file && !post?.mediaUrl
 
@@ -33,7 +35,7 @@ export default function PostFormModal({
 
     const res = await fetch(endpoint, {
       method,
-      body: JSON.stringify({ content, mediaUrl }),
+      body: JSON.stringify({ content, mediaUrl, orientation }),
       headers: { "Content-Type": "application/json" }
     })
 
@@ -45,7 +47,7 @@ export default function PostFormModal({
   }
 
   return (
-    <div className="w-full max-w-3xl px-6 py-6">
+    <div className="w-full max-w-3xl">
       <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg w-full max-w-md space-y-4">
         <h2 className="text-lg font-regular">{post ? "Edit Post" : "Create a Post"}</h2>
 
@@ -61,7 +63,17 @@ export default function PostFormModal({
         <input
           type="file"
           accept="image/*,video/*"
-          onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+          onChange={async (e) => {
+            const selectedFile = e.target.files?.[0] ?? null
+            setFile(selectedFile)
+
+            if (selectedFile) {
+              const inferred = await getMediaOrientation(selectedFile)
+              setOrientation(inferred)
+            } else {
+              setOrientation(null)
+            }
+          }}
           className="w-full text-sm text-gray-500"
         />
 

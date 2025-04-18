@@ -4,13 +4,12 @@ import { useEditMode } from "@/lib/editMode"
 import { useState } from "react"
 import { Button } from "@/ui/components/Button"
 import { DialogLayout } from "./subframe/ui"
-import PostFormModal2 from "@/components/PostFormModal"
+import PostFormModal from "@/components/PostFormModal"
 import FeedPageContent from "@/components/FeedPageContent"
 
 export default function FeedWrapper({ posts }: { posts: any[] }) {
   const [editMode, setEditMode] = useEditMode()
   const [showModal, setShowModal] = useState(false)
-  const [showDialog, setShowDialog] = useState(false)
 
   return (
     <div>
@@ -27,7 +26,7 @@ export default function FeedWrapper({ posts }: { posts: any[] }) {
             Post
           </Button>
           <DialogLayout open={showModal} onOpenChange={setShowModal}>
-            <PostFormModal2 onClose={() => setShowModal(false)} />
+            <PostFormModal onClose={() => setShowModal(false)} />
           </DialogLayout>
         </>
       )}

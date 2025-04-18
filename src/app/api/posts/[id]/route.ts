@@ -20,8 +20,24 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       where: { id: params.id },
       data: {
         content: body.content,
-        mediaUrl: body.mediaUrl ?? null,
+        media: body.mediaUrl
+          ? {
+            upsert: {
+              create: {
+                url: body.mediaUrl,
+                type: body.mediaUrl.endsWith(".mp4") ? "video" : "image",
+                orientation: body.orientation ?? null,
+              },
+              update: {
+                url: body.mediaUrl,
+                type: body.mediaUrl.endsWith(".mp4") ? "video" : "image",
+                orientation: body.orientation ?? null,
+              },
+            },
+          }
+          : undefined,
       },
+      include: { media: true }
     })
 
     return Response.json(updatedPost)

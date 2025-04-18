@@ -26,6 +26,7 @@ model Media {
   id     String @id @default(cuid())
   url    String
   type   String? // Optional: "image", "video", etc.
+  orientation String? // "portrait" or "landscape"
   post   Post   @relation(fields: [postId], references: [id])
   postId String
 }

@@ -11,21 +11,21 @@ async function main() {
     {
       content: "Testing video rendering 🎥",
       media: [
-        { url: "/uploads/sample-video.mp4", type: "video" },
+        { url: "/uploads/sample-video.mp4", type: "video", orientation: "portrait" },
       ],
     },
     {
       content: "This is a three images post 📷",
       media: [
-        { url: "/uploads/sample-photo.jpg", type: "image" },
-        { url: "/uploads/sample-photo.jpg", type: "image" },
-        { url: "/uploads/sample-photo.jpg", type: "image" },
+        { url: "/uploads/sample-photo.jpg", type: "image", orientation: "landscape" },
+        { url: "/uploads/sample-photo.jpg", type: "image", orientation: "landscape" },
+        { url: "/uploads/sample-photo.jpg", type: "image", orientation: "landscape" },
       ],
     },
     {
       content: "This is a single image post 📷",
       media: [
-        { url: "/uploads/sample-photo.jpg", type: "image" },
+        { url: "/uploads/sample-photo.jpg", type: "image", orientation: "landscape" },
       ],
     },
     {

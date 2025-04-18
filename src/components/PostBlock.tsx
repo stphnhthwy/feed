@@ -19,7 +19,8 @@ export default function PostBlock({
 
       {post.media?.length > 0 && (
         <PostMediaCarousel
-          mediaUrls={post.media.map((m) => m.url)} />
+          media={post.media}
+        />
       )}
 
       {editable && (
