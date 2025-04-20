@@ -18,8 +18,8 @@ export default function MediaCarousel({ media }: MediaCarouselProps) {
                     <div
                         key={`${item.url}-${i}`}
                         className={`flex-none snap-center rounded-8 ${item.orientation === "portrait"
-                            ? "w-[256px] aspect-auto"
-                            : "w-[512px] aspect-auto"
+                            ? "w-[224px] aspect-auto"
+                            : "w-[480px] aspect-auto"
                             }`}
                     >
                         {item.type === "video" ? (

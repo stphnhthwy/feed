@@ -8,10 +8,12 @@ import PostFormModal from "@/components/PostFormModal"
 import FeedPageContent2 from "@/components/FeedPageContent2"
 import DSNavigation from "./shared/DSNavigation"
 import ToolBar from "./shared/ToolBar"
+import Post from "@/components/shared/Post"
 
 export default function FeedWrapper({ posts }: { posts: any[] }) {
   const [editMode, setEditMode] = useEditMode()
   const [showModal, setShowModal] = useState(false)
+  const mode: "new" | "edit" = "new";
 
   return (
     <div>
@@ -25,7 +27,17 @@ export default function FeedWrapper({ posts }: { posts: any[] }) {
           onNewPostClick={() => setShowModal(true)}
         />
         {showModal && (
-          <PostFormModal onClose={() => setShowModal(false)} />
+          // <PostFormModal onClose={() => setShowModal(false)} />
+          <DialogLayout open>
+            <Post
+              mode={mode}
+              header={mode === "edit" ? "Edit post" : "New post"}
+              placeholder="Whats on your mind?"
+              content=""
+              onSubmit={(c) => console.log("Submit:", c)}
+              onCancel={() => setShowModal(false)}
+            />
+          </DialogLayout>
         )}
       </div>
     </div>

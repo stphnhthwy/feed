@@ -13,3 +13,11 @@ export function HStack({ children, className }: StackProps) {
 export function VStack({ children, className }: StackProps) {
     return <div className={clsx("flex flex-col", className)}>{children}</div>
 }
+
+export function ZStack({ children, className }: StackProps) {
+    return (
+        <div className={clsx("relative", className)}>
+            {children}
+        </div>
+    )
+}

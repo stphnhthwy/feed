@@ -1,6 +1,9 @@
+"use client"
+
+import { VStack, HStack, ZStack } from "@/utilities/Stack"
 import { IconButton } from "../subframe/ui"
 import { Switch } from "@/ui/components/Switch"
-import { FeatherFileEdit, FeatherPlusCircle } from "@subframe/core"
+import { FeatherFileEdit, FeatherPlus, FeatherPlusCircle } from "@subframe/core"
 
 interface ToolBarProps {
     editMode: boolean;
@@ -21,7 +24,15 @@ export default function ToolBar({ editMode, onToggleEditMode, onNewPostClick }: 
           shadow-sm
         "
         >
-            <div className="flex flex-row items-center gap-2">
+            <HStack className="gap-2">
+                <IconButton
+                    disabled={false}
+                    variant="brand-primary"
+                    size="medium"
+                    icon={<FeatherPlus />}
+                    loading={false}
+                    onClick={onNewPostClick}
+                />
                 <IconButton
                     disabled={false}
                     variant="neutral-tertiary"
@@ -31,17 +42,8 @@ export default function ToolBar({ editMode, onToggleEditMode, onNewPostClick }: 
                     onClick={() => { }}
                 />
                 <div className="h-6 w-px bg-neutral-200" />
-                <IconButton
-                    disabled={false}
-                    variant="brand-primary"
-                    size="medium"
-                    icon={<FeatherPlusCircle />}
-                    loading={false}
-                    onClick={onNewPostClick}
-                />
-                <div className="h-6 w-px bg-neutral-200" />
                 <Switch checked={editMode} onCheckedChange={onToggleEditMode} />
-            </div>
+            </HStack>
         </div>
     );
 }
