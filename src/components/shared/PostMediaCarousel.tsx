@@ -12,7 +12,7 @@ export default function MediaCarousel({ media }: MediaCarouselProps) {
     if (!media || media.length === 0) return null;
 
     return (
-        <div className="w-full overflow-x-auto">
+        <div className="w-full overflow-hidden overflow-x-auto">
             <div className="flex whitespace-nowrap gap-2 scroll-smooth snap-x snap-mandatory">
                 {media.map((item, i) => (
                     <div

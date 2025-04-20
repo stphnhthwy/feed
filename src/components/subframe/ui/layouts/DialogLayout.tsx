@@ -20,7 +20,11 @@ const DialogLayoutRoot = React.forwardRef<HTMLElement, DialogLayoutRootProps>(
     ref
   ) {
     return (
-      <Dialog className={className} ref={ref as any} {...otherProps}>
+      <Dialog
+        className={SubframeUtils.twClassNames("group/ff4920a8", className)}
+        ref={ref as any}
+        {...otherProps}
+      >
         <Dialog.Content>
           {children ? (
             <div className="flex w-full grow shrink-0 basis-0 items-start gap-6">

@@ -16,10 +16,17 @@ export default function FeedPageContent({ posts, editable }: { posts: any[], edi
   }
 
   return (
-
-    <div style={{ padding: "2rem", maxWidth: "600px", margin: "0 auto" }}>
-
-      <p className="text-heading-1 text-blue-500 bg-success-500">Testing baseline Tailwind styles!</p>
+    <div
+      className="
+        flex-col 
+        bg-default-background
+        border 
+        border-brand-100
+        w-[600px] 
+        mx-auto
+        rounded-lg
+      "
+    >
 
       {posts.map((post) => (
         <PostBlock

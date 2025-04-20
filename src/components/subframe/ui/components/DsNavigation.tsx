@@ -1,8 +1,8 @@
 "use client";
 /*
  * Documentation:
- * Sidebar with minimal text sections — https://app.subframe.com/abced8033a23/library?component=Sidebar+with+minimal+text+sections_5ceb0e51-a859-4b82-b5ee-367eaf41d29d
- * Icon Button — https://app.subframe.com/abced8033a23/library?component=Icon+Button_af9405b1-8c54-4e01-9786-5aad308224f6
+ * DS Navigation — https://app.subframe.com/abced8033a23/library?component=DS+Navigation_a5284b1d-a26a-4aca-9bc1-8676aee537f9
+ * Switch — https://app.subframe.com/abced8033a23/library?component=Switch_7a464794-9ea9-4040-b1de-5bfb2ce599d9
  */
 
 import React from "react";
@@ -31,7 +31,7 @@ const NavItem = React.forwardRef<HTMLElement, NavItemProps>(function NavItem(
   return (
     <div
       className={SubframeUtils.twClassNames(
-        "group/9fa6ec70 flex w-full cursor-pointer items-center gap-2 rounded-md py-1",
+        "group/29ccd386 flex w-full cursor-pointer items-center gap-2 rounded-md py-1",
         className
       )}
       ref={ref as any}
@@ -40,7 +40,7 @@ const NavItem = React.forwardRef<HTMLElement, NavItemProps>(function NavItem(
       {icon ? (
         <SubframeCore.IconWrapper
           className={SubframeUtils.twClassNames(
-            "text-body font-body text-subtext-color group-hover/9fa6ec70:text-default-font",
+            "text-body font-body text-subtext-color group-hover/29ccd386:text-default-font",
             { "text-default-font": selected }
           )}
         >
@@ -50,9 +50,9 @@ const NavItem = React.forwardRef<HTMLElement, NavItemProps>(function NavItem(
       {children ? (
         <span
           className={SubframeUtils.twClassNames(
-            "line-clamp-1 text-body font-body text-subtext-color group-hover/9fa6ec70:text-default-font",
+            "line-clamp-1 text-body font-body text-subtext-color group-hover/29ccd386:text-default-font",
             {
-              "text-body-bold font-body-bold text-default-font group-hover/9fa6ec70:no-underline":
+              "text-body-bold font-body-bold text-default-font group-hover/29ccd386:no-underline":
                 selected,
             }
           )}
@@ -102,59 +102,54 @@ const NavSection = React.forwardRef<HTMLElement, NavSectionProps>(
   }
 );
 
-interface SidebarWithMinimalTextSectionsRootProps
-  extends React.HTMLAttributes<HTMLElement> {
+interface DsNavigationRootProps extends React.HTMLAttributes<HTMLElement> {
   header?: React.ReactNode;
   children?: React.ReactNode;
   footer?: React.ReactNode;
   className?: string;
 }
 
-const SidebarWithMinimalTextSectionsRoot = React.forwardRef<
-  HTMLElement,
-  SidebarWithMinimalTextSectionsRootProps
->(function SidebarWithMinimalTextSectionsRoot(
-  {
-    header,
-    children,
-    footer,
-    className,
-    ...otherProps
-  }: SidebarWithMinimalTextSectionsRootProps,
-  ref
-) {
-  return (
-    <nav
-      className={SubframeUtils.twClassNames(
-        "flex h-full w-72 flex-col items-start bg-default-background",
-        className
-      )}
-      ref={ref as any}
-      {...otherProps}
-    >
-      {header ? (
-        <div className="flex w-full flex-col items-start gap-2 px-8 pt-8 pb-6">
-          {header}
-        </div>
-      ) : null}
-      {children ? (
-        <div className="flex w-full grow shrink-0 basis-0 flex-col items-start gap-12 px-8 py-6 overflow-auto">
-          {children}
-        </div>
-      ) : null}
-      {footer ? (
-        <div className="flex w-full flex-col items-start justify-end gap-2 px-6 py-6">
-          {footer}
-        </div>
-      ) : null}
-    </nav>
-  );
-});
-
-export const SidebarWithMinimalTextSections = Object.assign(
-  SidebarWithMinimalTextSectionsRoot,
-  {
-    NavItem,
-    NavSection,
+const DsNavigationRoot = React.forwardRef<HTMLElement, DsNavigationRootProps>(
+  function DsNavigationRoot(
+    {
+      header,
+      children,
+      footer,
+      className,
+      ...otherProps
+    }: DsNavigationRootProps,
+    ref
+  ) {
+    return (
+      <nav
+        className={SubframeUtils.twClassNames(
+          "flex w-48 flex-col items-start bg-default-background h-screen",
+          className
+        )}
+        ref={ref as any}
+        {...otherProps}
+      >
+        {header ? (
+          <div className="flex w-full flex-col items-start gap-2 pl-4 pr-6 pt-4 pb-3">
+            {header}
+          </div>
+        ) : null}
+        {children ? (
+          <div className="flex w-full grow shrink-0 basis-0 flex-col items-start gap-12 px-4 py-6 overflow-auto">
+            {children}
+          </div>
+        ) : null}
+        {footer ? (
+          <div className="flex w-full flex-col items-start justify-end gap-2 px-4 pt-2 pb-3">
+            {footer}
+          </div>
+        ) : null}
+      </nav>
+    );
   }
 );
+
+export const DsNavigation = Object.assign(DsNavigationRoot, {
+  NavItem,
+  NavSection,
+});

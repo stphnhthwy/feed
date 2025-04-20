@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect} from "react"
+import { useState, useEffect } from "react"
 
 export function useEditMode() {
     const [editMode, setEditMode] = useState(false)

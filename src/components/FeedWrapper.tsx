@@ -5,7 +5,9 @@ import { useState } from "react"
 import { Button } from "@/ui/components/Button"
 import { DialogLayout } from "./subframe/ui"
 import PostFormModal from "@/components/PostFormModal"
-import FeedPageContent from "@/components/FeedPageContent"
+import FeedPageContent2 from "@/components/FeedPageContent2"
+import DSNavigation from "./shared/DSNavigation"
+import ToolBar from "./shared/ToolBar"
 
 export default function FeedWrapper({ posts }: { posts: any[] }) {
   const [editMode, setEditMode] = useEditMode()
@@ -13,25 +15,19 @@ export default function FeedWrapper({ posts }: { posts: any[] }) {
 
   return (
     <div>
-      <Button
-        variant="neutral-secondary"
-        onClick={() => setEditMode(!editMode)} style={{ margin: "1rem" }}>
-        {editMode ? "Public View" : "Edit Mode"}
-      </Button>
-
-      {editMode && (
-        <>
-          <Button
-            onClick={() => setShowModal(true)} style={{ margin: "1rem" }}>
-            Post
-          </Button>
-          <DialogLayout open={showModal} onOpenChange={setShowModal}>
-            <PostFormModal onClose={() => setShowModal(false)} />
-          </DialogLayout>
-        </>
-      )}
-
-      <FeedPageContent posts={posts} editable={editMode} />
+      <div className="flex flex-col items-center bg-neutral-100 py-4 h-screen overflow-hidden">
+        <FeedPageContent2 posts={posts} editable={editMode} />
+      </div>
+      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2">
+        <ToolBar
+          editMode={editMode}
+          onToggleEditMode={() => setEditMode(!editMode)}
+          onNewPostClick={() => setShowModal(true)}
+        />
+        {showModal && (
+          <PostFormModal onClose={() => setShowModal(false)} />
+        )}
+      </div>
     </div>
   )
 }
