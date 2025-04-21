@@ -27,3 +27,25 @@ export async function POST(req: Request) {
 
   return Response.json(post)
 }
+
+//Future problem
+
+// export async function POST(req: Request) {
+//   const body = await req.json();
+//   const { content, media = [] } = body; // media: { url, type, orientation }[]
+
+//   const post = await prisma.post.create({
+//     data: {
+//       content,
+//       media: {
+//         create: media.map((item: { url: string; type: string; orientation: string | null }) => ({
+//           url: item.url,
+//           type: item.type,
+//           orientation: item.orientation,
+//         })),
+//       },
+//     },
+//   });
+
+//   return Response.json(post);
+// }

@@ -7,37 +7,45 @@ import { DialogLayout } from "./subframe/ui"
 import PostFormModal from "@/components/PostFormModal"
 import FeedPageContent2 from "@/components/FeedPageContent2"
 import DSNavigation from "./shared/DSNavigation"
-import ToolBar from "./shared/ToolBar"
-import Post from "@/components/shared/Post"
+import ToolBar from "./toolbar/ToolBar"
+import PostController from "./post/PostController"
 
 export default function FeedWrapper({ posts }: { posts: any[] }) {
+  const [postList, setPostList] = useState(posts);
   const [editMode, setEditMode] = useEditMode()
-  const [showModal, setShowModal] = useState(false)
-  const mode: "new" | "edit" = "new";
+  const [modalState, setModalState] = useState<{
+    mode: "new" | "edit";
+    post?: any;
+  } | null>(null);
 
   return (
     <div>
       <div className="flex flex-col items-center bg-neutral-100 py-4 h-screen overflow-hidden">
-        <FeedPageContent2 posts={posts} editable={editMode} />
+        <FeedPageContent2 posts={postList} editable={editMode} />
       </div>
       <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2">
         <ToolBar
           editMode={editMode}
           onToggleEditMode={() => setEditMode(!editMode)}
-          onNewPostClick={() => setShowModal(true)}
+          onNewPostClick={() => setModalState({ mode: "new" })}
         />
-        {showModal && (
-          // <PostFormModal onClose={() => setShowModal(false)} />
-          <DialogLayout open>
-            <Post
-              mode={mode}
-              header={mode === "edit" ? "Edit post" : "New post"}
-              placeholder="Whats on your mind?"
-              content=""
-              onSubmit={(c) => console.log("Submit:", c)}
-              onCancel={() => setShowModal(false)}
-            />
-          </DialogLayout>
+
+        {modalState && (
+          <PostController
+            mode={modalState.mode}
+            post={modalState.post}
+            onClose={() => {
+              setModalState(null);
+              fetch("/api/posts")
+                .then(res => res.json())
+                .then(data => {
+                  const sorted = data.sort(
+                    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                  );
+                  setPostList(sorted);
+                });
+            }}
+          />
         )}
       </div>
     </div>

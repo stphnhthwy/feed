@@ -4,7 +4,7 @@ import { useState } from "react"
 import { VStack, HStack, ZStack } from "@/utilities/Stack"
 import { Button, DialogLayout, IconButton, TextArea } from "../subframe/ui"
 import { FeatherX } from "@subframe/core";
-import MediaUpload from "./MediaUpload";
+import MediaUpload from "../shared/MediaUpload";
 
 type PostProps = {
     mode: "new" | "edit";
@@ -13,12 +13,13 @@ type PostProps = {
     content?: string;
     onSubmit: (content: string) => void;
     onCancel?: () => void;
+    media: LocalMedia[];
+    setMedia: React.Dispatch<React.SetStateAction<LocalMedia[]>>;
 };
 
-export default function Post({ mode, header, placeholder, initialContent, onSubmit, onCancel }: PostProps) {
-
-    const [media, setMedia] = useState<LocalMedia[]>([]);
+export default function PostComponent({ mode, header, placeholder, content: initialContent, onSubmit, onCancel }: PostProps) {
     const [content, setContent] = useState(initialContent ?? "");
+    const [media, setMedia] = useState<LocalMedia[]>([]);
 
     return (
         <VStack className="w-[700px] rounded-md bg-neutral-0">
@@ -66,18 +67,21 @@ export default function Post({ mode, header, placeholder, initialContent, onSubm
 // 🧪 Preview Component — Test inside any /sandbox page
 //
 
-export function PostPreview() {
+export function PostComponentPreview() {
     const mode: "new" | "edit" = "new";
+    const [media, setMedia] = useState<LocalMedia[]>([]);
 
     return (
         <DialogLayout open>
-            <Post
+            <PostComponent
                 mode={mode}
                 header={mode === "edit" ? "Edit post" : "New post"}
                 placeholder="Whats on your mind?"
                 content=""
                 onSubmit={(c) => console.log("Submit:", c)}
                 onCancel={() => console.log("Cancel")}
+                media={media}
+                setMedia={setMedia}
             />
         </DialogLayout>
     );
