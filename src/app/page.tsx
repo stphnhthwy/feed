@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/db"
-import FeedWrapper from "@/components/FeedWrapper"
+import Feed from "@/components/feed/Feed"
 
 export default async function HomePage() {
 
@@ -10,5 +10,5 @@ export default async function HomePage() {
     orderBy: { createdAt: "desc" }
   })
 
-  return <FeedWrapper posts={posts} />
+  return <Feed posts={posts} />
 }

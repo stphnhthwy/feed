@@ -30,7 +30,7 @@
         "./src/components/subframe/ui/*"
       ],
       "@/utilities/*": [
-        "./src/utilities/*"
+        "utilities/*"
       ]
     }
   },

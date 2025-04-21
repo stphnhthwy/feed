@@ -1,7 +1,7 @@
 // src/app/sandbox/page.tsx
 "use client"
 
-import { PostComponentPreview } from "@/components/post/PostComponent"
+import { PostComponentPreview } from "@/components/post/PostForm"
 
 export default function SandboxPage() {
     return (
