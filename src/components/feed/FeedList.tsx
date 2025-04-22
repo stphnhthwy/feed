@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { FeedContainer } from "../subframe/ui/components/FeedContainer"
+import { deletePost } from "@/lib/postApi"
 import FeedItem from "./FeedItem"
 
 export default function FeedList({ posts, editable }: { posts: any[], editable: boolean }) {
@@ -9,9 +10,9 @@ export default function FeedList({ posts, editable }: { posts: any[], editable: 
   const [selectedPost, setSelectedPost] = useState<any | null>(null)
 
   async function handleDelete(postId: string) {
-    const res = await fetch(`/api/posts/${postId}`, { method: "DELETE" })
+    const res = await deletePost(postId)
     if (res.ok) {
-      window.location.reload() // simple reload to refresh the feed
+      window.location.reload()
     } else {
       alert("Failed to delete post")
     }

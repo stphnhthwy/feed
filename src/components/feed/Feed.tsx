@@ -1,7 +1,8 @@
 'use client'
 
-import { useEditMode } from "@/lib/editMode"
 import { useState } from "react"
+import { fetchPosts } from "@/lib/postApi"
+import { useEditMode } from "@/lib/editMode"
 import PostModal from "../post/PostModal"
 import ToolBar from "./ToolBar"
 import FeedList from "@/components/feed/FeedList"
@@ -32,7 +33,7 @@ export default function Feed({ posts }: { posts: any[] }) {
             post={modalState.post}
             onClose={() => {
               setModalState(null);
-              fetch("/api/posts")
+              fetchPosts().then(setPostList).catch(console.error)
                 .then(res => res.json())
                 .then(data => {
                   const sorted = data.sort(

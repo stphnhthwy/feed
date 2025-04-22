@@ -13,17 +13,7 @@ interface ToolBarProps {
 
 export default function ToolBar({ editMode, onToggleEditMode, onNewPostClick }: ToolBarProps) {
     return (
-        <div
-            className="
-          p-2
-          bg-neutral-0 
-          w-fit
-          border 
-          border-neutral-200
-          rounded-lg
-          shadow-sm
-        "
-        >
+        <HStack className="p-2 bg-neutral-0 w-fit border border-neutral-200 rounded-lg shadow-sm">
             <HStack className="gap-2">
                 <IconButton
                     disabled={false}
@@ -44,6 +34,6 @@ export default function ToolBar({ editMode, onToggleEditMode, onNewPostClick }: 
                 <div className="h-6 w-px bg-neutral-200" />
                 <Switch checked={editMode} onCheckedChange={onToggleEditMode} />
             </HStack>
-        </div>
+        </HStack>
     );
 }

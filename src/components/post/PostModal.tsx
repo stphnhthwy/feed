@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from "react";
-import PostForm from "./PostForm";
+import { createPost, updatePost } from "@/lib/postApi";
 import { DialogLayout } from "../subframe/ui";
+import PostForm from "./PostForm";
 
 type PostModalProps = {
     mode: "new" | "edit";
@@ -17,26 +18,22 @@ type PostModalProps = {
 export default function PostModal({ mode, post, onClose }: PostModalProps) {
     const [content, setContent] = useState(post?.content ?? "");
     const [media, setMedia] = useState<LocalMedia[]>(post?.media ?? []);
-
     const handleSubmit = async (value: string) => {
-        const body = JSON.stringify({
+        const payload = {
             content: value,
             media: media.map((m) => ({
                 url: m.url,
                 type: m.type,
                 orientation: m.orientation ?? null,
             })),
-        });
+        };
 
         try {
-            const endpoint = mode === "edit" ? `/api/posts/${post?.id}` : `/api/posts`;
-            const method = mode === "edit" ? "PATCH" : "POST";
-
-            await fetch(endpoint, {
-                method,
-                headers: { "Content-Type": "application/json" },
-                body,
-            });
+            if (mode === "edit" && post?.id) {
+                await updatePost(post.id, payload);
+            } else {
+                await createPost(payload);
+            }
 
             onClose();
         } catch (err) {

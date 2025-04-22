@@ -22,7 +22,7 @@ export default function PostForm({ mode, header, placeholder, content: initialCo
     const [media, setMedia] = useState<LocalMedia[]>([]);
 
     return (
-        <VStack className="w-[700px] rounded-md bg-neutral-0">
+        <VStack className="w-[700px] rounded-md bg-white">
             <VStack className="p-4 gap-4">
                 <HStack className="w-full justify-between">
                     <h2>{header}</h2>
