@@ -1,48 +1,42 @@
-import { prisma } from "@/lib/db"
+import { prisma } from "@/lib/db";
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
-  try {
-    await prisma.post.delete({
-      where: { id: params.id },
-    })
-    return new Response(null, { status: 204 })
-  } catch (error) {
-    console.error("DELETE error:", error)
-    return new Response("Post not found", { status: 404 })
-  }
+interface Params {
+  params: { id: string };
 }
 
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
-  try {
-    const body = await request.json()
+// --- PATCH: Update a specific post ---
+export async function PATCH(req: Request, { params }: Params) {
+  const body = await req.json();
+  const { content, media = [] } = body;
 
-    const updatedPost = await prisma.post.update({
-      where: { id: params.id },
-      data: {
-        content: body.content,
-        media: body.mediaUrl
-          ? {
-            upsert: {
-              create: {
-                url: body.mediaUrl,
-                type: body.mediaUrl.endsWith(".mp4") ? "video" : "image",
-                orientation: body.orientation ?? null,
-              },
-              update: {
-                url: body.mediaUrl,
-                type: body.mediaUrl.endsWith(".mp4") ? "video" : "image",
-                orientation: body.orientation ?? null,
-              },
-            },
-          }
-          : undefined,
+  const updatedPost = await prisma.post.update({
+    where: { id: params.id },
+    data: {
+      content,
+      media: {
+        deleteMany: {}, // Optional: clear old media
+        create: media.map((item: { url: string; type: string; orientation: string | null }) => ({
+          url: item.url,
+          type: item.type,
+          orientation: item.orientation,
+        })),
       },
-      include: { media: true }
-    })
+    },
+    include: { media: true },
+  });
 
-    return Response.json(updatedPost)
-  } catch (error) {
-    console.error("PATCH error:", error)
-    return new Response("Failed to update post", { status: 500 })
-  }
+  return Response.json(updatedPost);
+}
+
+// --- DELETE: Delete a specific post ---
+export async function DELETE(req: Request, { params }: Params) {
+  await prisma.media.deleteMany({
+    where: { postId: params.id },
+  });
+
+  await prisma.post.delete({
+    where: { id: params.id },
+  });
+
+  return new Response(null, { status: 204 });
 }

@@ -1,44 +1,52 @@
 'use client'
 
-import { useState } from "react";
-import { createPost, updatePost } from "@/lib/postApi";
 import { DialogLayout } from "../subframe/ui";
 import PostForm from "./PostForm";
+import { usePostMutation } from "@/hooks/usePostMutation";
+import { usePostFormState } from "@/hooks/usePostFormState";
+import { usePostList } from "@/hooks/usePostList";
+import { Post } from "@/types/Post";
 
 type PostModalProps = {
     mode: "new" | "edit";
-    post?: {
-        id: string;
-        content: string;
-        initialContent?: string;
-    }
+    post?: Post;
     onClose: () => void;
+    onPostCreated?: (newPost: Post) => void;
+    onPostUpdated?: (updatedPost: Post) => void;
 };
 
-export default function PostModal({ mode, post, onClose }: PostModalProps) {
-    const [content, setContent] = useState(post?.content ?? "");
-    const [media, setMedia] = useState<LocalMedia[]>(post?.media ?? []);
-    const handleSubmit = async (value: string) => {
-        const payload = {
-            content: value,
-            media: media.map((m) => ({
-                url: m.url,
-                type: m.type,
-                orientation: m.orientation ?? null,
-            })),
-        };
+export default function PostModal({ mode, post, onClose, onPostCreated, onPostUpdated }: PostModalProps) {
+    const {
+        content,
+        setContent,
+        media,
+        setMedia,
+        isValid,
+        getPayload,
+    } = usePostFormState({
+        content: post?.content,
+        media: post?.media,
+    });
+
+    const { create, update, isLoading, error } = usePostMutation();
+
+    const handleSubmit = async () => {
+        const payload = getPayload();
+        console.log("Submitting post:", payload);
 
         try {
             if (mode === "edit" && post?.id) {
-                await updatePost(post.id, payload);
+                const updatedPost = await update(post.id, payload);
+                onPostUpdated?.(updatedPost); // ✅ now this actually runs
             } else {
-                await createPost(payload);
+                const newPost = await create(payload);
+                console.log("Post created:", newPost);
+                onPostCreated?.(newPost);
             }
-
-            onClose();
         } catch (err) {
-            console.error(err);
-            alert("There was an error saving the post.");
+            console.error("Post submission error:", err);
+        } finally {
+            onClose();
         }
     };
 
@@ -48,11 +56,12 @@ export default function PostModal({ mode, post, onClose }: PostModalProps) {
                 mode={mode}
                 header={mode === "edit" ? "Edit post" : "New post"}
                 placeholder="What's on your mind?"
-                initialContent={content}
-                onSubmit={handleSubmit}
-                onCancel={onClose}
+                content={content}
+                onChangeContent={setContent}
                 media={media}
                 setMedia={setMedia}
+                onSubmit={handleSubmit}
+                onCancel={onClose}
             />
         </DialogLayout>
     );
