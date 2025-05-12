@@ -16,6 +16,17 @@ datasource db {
 model Post {
   id        String   @id @default(cuid())
   content   String
-  mediaUrl  String?
+  media  Media[]
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+}
+
+
+model Media {
+  id     String @id @default(cuid())
+  url    String
+  type   String? // Optional: "image", "video", etc.
+  orientation String? // "portrait" or "landscape"
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String
 }
