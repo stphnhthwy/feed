@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from "react"
-import { Button, TextArea, DialogLayout } from "./subframe/ui"
+import { useUser } from "@auth0/nextjs-auth0/client"
+import { Button, TextArea } from "./subframe/ui"
 import { getMediaOrientation } from "@/lib/orientation"
 
 type Post = {
@@ -17,6 +18,7 @@ export default function PostFormModal({
   onClose: () => void,
   post?: Post
 }) {
+  const { user } = useUser()
   const [content, setContent] = useState(post?.content || "")
   const [file, setFile] = useState<File | null>(null)
   const [orientation, setOrientation] = useState<"portrait" | "landscape" | null>(null)
@@ -45,6 +47,8 @@ export default function PostFormModal({
       alert("Failed to submit post")
     }
   }
+
+  if (!user) return null
 
   return (
     <div className="w-full max-w-3xl">
