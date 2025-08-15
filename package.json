@@ -10,6 +10,7 @@
     "seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' scripts/seed.ts"
   },
   "dependencies": {
+    "@auth0/nextjs-auth0": "^3.5.0",
     "@prisma/client": "^6.6.0",
     "@subframe/core": "^1.142.0",
     "next": "15.3.0",
